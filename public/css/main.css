@@ -1,0 +1,117 @@
+body {
+  width:100%;
+  min-height:100%;
+  margin:0px;
+  padding:20px;
+  overflow-x: hidden;
+}
+
+#app {
+ width:100%;
+ height:100%;
+}
+
+.sortableHelper {
+   z-index: 10000 !important;
+}
+
+.dropzone {
+ height: 100%;
+ width: 100%;
+ opacity:0;
+ position:absolute;
+ top:0px;
+ left:0px;
+}
+
+.block {
+ min-height: 200px;
+ background-position: center center;
+ background-repeat: no-repeat;
+ background-size: contain;
+}
+
+.originalSize {
+  height: 65vw;
+  min-height: 65vw;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.star {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3b/Star_icon.png');
+  min-height: 30px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  font-size: 2em;
+  text-align: center;
+}
+
+.editor-root {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
+  width:100%;
+  height:100%;
+}
+
+.editor-loading {
+  text-align: center;
+  padding-top:4%;
+}
+
+.editor-wrapper {
+  width: 100%;
+  white-space:nowrap;
+  overflow:hidden;
+  padding:50px;
+}
+
+.editor-star-container {
+  position:absolute;
+  top:-50px;
+  left: -25px;
+  font-size: 5em;
+  color:#FFEB3B;
+}
+
+.editor-star-number {
+  position: absolute;
+  font-size: .5em;
+  top: 30px;
+  z-index:2;
+  width:100%;
+  text-align: center;
+  color:black;
+}
+
+.editor-upload-button {
+  position:fixed !important;
+  bottom:10px;
+  right:10px;
+  width:60px !important;
+  height:60px !important;
+}
+
+.editor-item {
+  position:relative;
+
+  min-width:150px;
+  min-height:150px;
+  width: 15%;
+  display:inline-block;
+  white-space: nowrap;
+  margin: 20px;
+  padding:2%;
+  cursor: move;
+
+  vertical-align: middle;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px
+}
