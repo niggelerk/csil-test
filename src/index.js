@@ -3,7 +3,6 @@ import 'antd/dist/antd.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Start from './components/start'
-import Editor from './components/editor'
 import ScrollingEditor from './components/nicotest'
 import {
  BrowserRouter,
@@ -17,8 +16,7 @@ class App extends React.Component {
    <BrowserRouter>
     <Switch>
      <Route exact path='/' component={Start} />
-     <Route path='/editor' component={Editor} />
-     <Route path='/seditor' component={ScrollingEditor} />
+     <Route path='/editor' component={ScrollingEditor} />
     </Switch>
    </BrowserRouter>
   )
