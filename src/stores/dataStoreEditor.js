@@ -61,7 +61,7 @@ class DataStoreEditor {
  }
 
 
- @action.bound modifyImage(url, id){
+ @action.bound turnRight(url, id){
   let urlString = url
   let urlBeginning = "https://res.cloudinary.com/niggelerk/image/upload/"
   let urlParameter = "a_90"
@@ -69,15 +69,6 @@ class DataStoreEditor {
   let urlEnd = "/" + urlArray[6]+"/"+urlArray[7]
   let modifiedUrl = urlBeginning+urlParameter+urlEnd
   this.items[id-1] = {url: modifiedUrl, id: id}
- }
-
- @action.bound givingParameters () {
-  let turnRightParameter=""
-  let turnLeftParameter=""
-  let turn180degreesParameter=""
-
-  let allParametersString = turnRightParameter+turnLeftParameter+turn180degreesParameter
-  return allParametersString
  }
 
  @action.bound swapItems(obj) {

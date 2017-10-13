@@ -11,9 +11,14 @@ import {
 class Start extends React.Component {
  render() {
   return (
+    <div>
    <Link to = "/editor" >
-    <Button type = "default" > Zum Editor < /Button>
+    <Button type = "default" size='large' > Zum Editor < /Button>
    </Link>
+   <Link to ="/game">
+   <Button type = "primary" size='large' > Zum Game </Button>
+   </Link>
+   </div>
   )
  }
 }
