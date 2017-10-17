@@ -2,15 +2,12 @@ import React from 'react'
 import Dropzone from 'react-dropzone'
 import {SortableContainer, SortableElement} from 'react-sortable-hoc'
 import { Icon, Modal, Spin, Button } from 'antd'
+import {inject,observer} from 'mobx-react'
 
-import {observer} from 'mobx-react'
-import storeEditor from '../stores/dataStoreEditor'
-import storeUIEditor from '../stores/uiStoreEditor'
-
-@observer
-class ScrollingEditor extends React.Component {
+@inject('storeUIEditor') @observer
+class Editor extends React.Component {
   render() {
-    const ui = storeUIEditor
+    const ui = this.props.storeUIEditor
     return (
      <div className="editor-root">
       <UserItemList />
@@ -25,10 +22,10 @@ class ScrollingEditor extends React.Component {
   }
 }
 
-@observer
+@inject('storeUIEditor','storeEditor') @observer
 class UserItemList extends React.Component {
   render () {
-    const store = storeEditor, ui = storeUIEditor
+    const ui = this.props.storeUIEditor, store = this.props.storeEditor
     const SortableList = SortableContainer( observer(() => {
       return (
         <div className="editor-wrapper">
@@ -57,10 +54,10 @@ class UserItemList extends React.Component {
   }
 }
 
-@observer
+@inject('storeUIEditor') @observer
 class UserItem extends React.Component {
   render () {
-    const item = this.props.item, ui = storeUIEditor
+    const item = this.props.item, ui = this.props.storeUIEditor
     const SortableItem = SortableElement( observer(() => {
      return (
       <div
@@ -83,10 +80,10 @@ class UserItem extends React.Component {
  }
 }
 
-@observer
+@inject('storeEditor') @observer
 class UserItemUploadButton extends React.Component {
   render () {
-    const store = storeEditor
+    const store = this.props.storeEditor
     return (
       <Button shape="circle" icon="camera-o" className="editor-upload-button">
        <Dropzone className="dropzone" onDrop={store.uploadFile} />
@@ -98,4 +95,4 @@ class UserItemUploadButton extends React.Component {
 
 
 
-export default ScrollingEditor
+export default Editor

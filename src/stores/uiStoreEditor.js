@@ -20,5 +20,4 @@ class UIStoreEditor {
 
 }
 
-const storeUIEditor = new UIStoreEditor()
-export default storeUIEditor
+export default UIStoreEditor

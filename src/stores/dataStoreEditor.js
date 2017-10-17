@@ -1,10 +1,14 @@
 import {observable,action,toJS} from 'mobx'
 import sha1 from 'sha1'
 import superagent from 'superagent'
-import storeUIEditor from './uiStoreEditor'
+import {inject,observer} from 'mobx-react'
 
 
 class DataStoreEditor {
+ constructor(storeUIEditor) {
+   this.storeUIEditor = storeUIEditor
+ }
+
  @observable items = [
   {url:"http://thecatapi.com/api/images/get?format=src&type=gif", id: 1},
   {url:"http://thecatapi.com/api/images/get?format=src&type=gif", id: 2},
@@ -27,7 +31,7 @@ class DataStoreEditor {
  }
 
  @action.bound uploadFile(files) {
-  storeUIEditor.toggleItemLoading()
+  this.storeUIEditor.toggleItemLoading()
 
   const
    image = files[0],
@@ -54,7 +58,7 @@ class DataStoreEditor {
    img.onload = () => {
     // image finished loading, push to items
     this.items.push({url:resp.body.secure_url, id:5})
-    storeUIEditor.toggleItemLoading()
+    this.storeUIEditor.toggleItemLoading()
    }
    img.src = resp.body.secure_url
   })
@@ -85,5 +89,4 @@ class DataStoreEditor {
 
 }
 
-const storeEditor = new DataStoreEditor()
-export default storeEditor
+export default DataStoreEditor

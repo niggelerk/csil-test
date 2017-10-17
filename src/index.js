@@ -3,7 +3,7 @@ import 'antd/dist/antd.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Start from './components/start'
-import ScrollingEditor from './components/nicotest'
+import Editor from './components/editor'
 import Game from './components/game'
 import {
  BrowserRouter,
@@ -11,18 +11,24 @@ import {
  Route
 } from 'react-router-dom'
 
+import { default as rootStore } from './stores/storeHolder'
+import  { observer, Provider } from 'mobx-react'
+
+@observer
 class App extends React.Component {
  render() {
   return (
    <BrowserRouter>
-    <Switch>
-     <Route exact path='/' component={Start} />
-     <Route path='/editor' component={ScrollingEditor} />
-     <Route path='/game' component={Game}/>
-    </Switch>
+    <Provider storeEditor={rootStore.editor.data} storeUIEditor={rootStore.editor.ui} >
+     <Switch>
+      <Route exact path='/' component={Start} />
+      <Route path='/editor' component={Editor} />
+      <Route path='/game' component={Game}/>
+     </Switch>
+    </Provider>
    </BrowserRouter>
   )
  }
 }
 
-ReactDOM.render( < App / > , document.getElementById('app'))
+ReactDOM.render(<App/>, document.getElementById('app'))
