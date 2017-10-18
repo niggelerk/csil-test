@@ -92,7 +92,4 @@ class UserItemUploadButton extends React.Component {
   }
 }
 
-
-
-
 export default Editor

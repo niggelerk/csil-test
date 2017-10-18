@@ -2,12 +2,15 @@ import {observable,action,toJS} from 'mobx'
 import sha1 from 'sha1'
 import superagent from 'superagent'
 import {inject,observer} from 'mobx-react'
-
+import accessData from '../secret/accessData.json'
+import fetch from 'isomorphic-fetch'
 
 class DataStoreEditor {
  constructor(storeUIEditor) {
    this.storeUIEditor = storeUIEditor
  }
+
+ riddleId
 
  @observable items = [
   {url:"http://thecatapi.com/api/images/get?format=src&type=gif", id: 1},
@@ -30,19 +33,36 @@ class DataStoreEditor {
   }
  }
 
+ createNewRiddle(){
+   fetch('/api/riddle/create', {
+     method: 'GET'
+   })
+ }
+
+ uploadItemToServer (url) {
+   fetch('/api/editor/upload', {
+     method: 'POST',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify({url:url,riddleId:this.riddleId})
+   })
+ }
+
  @action.bound uploadFile(files) {
   this.storeUIEditor.toggleItemLoading()
 
   const
    image = files[0],
-   cloudName = 'niggelerk',
+   cloudName = accessData.cloudinary.cloudName,
    url = "https://api.cloudinary.com/v1_1/" + cloudName + '/image/upload',
    timestamp = Date.now() / 1000,
-   uploadPreset = 'jxfez55y',
-   paramsStr = 'timestamp=' + timestamp + '&upload_preset=' + uploadPreset + 'K4t5YbqayvEUomp8Th5OcC2tvNM',
+   uploadPreset = accessData.cloudinary.uploadPreset,
+   paramsStr = 'timestamp=' + timestamp + '&upload_preset=' + uploadPreset + accessData.cloudinary.paramsStrPart,
    signature = sha1(paramsStr),
    params = {
-    'api_key': '671448322652367',
+    'api_key': accessData.cloudinary.api_key,
     'timestamp': timestamp,
     'upload_preset': uploadPreset,
     'signature': signature
@@ -52,6 +72,9 @@ class DataStoreEditor {
   Object.keys(params).forEach((key) => {uploadRequest.field(key, params[key])})
   uploadRequest.end((err, resp) => {
    if (err) { console.log(err); return }
+
+    // image to db
+    this.uploadItemToServer(resp.body.secure_url)
 
    // upload succeeded, create image in RAM
    var img = new Image()
