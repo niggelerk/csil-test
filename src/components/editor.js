@@ -4,7 +4,7 @@ import {SortableContainer, SortableElement} from 'react-sortable-hoc'
 import { Icon, Modal, Spin, Button } from 'antd'
 import {inject,observer} from 'mobx-react'
 
-@inject('storeUIEditor') @observer
+@inject('storeEditor','storeUIEditor') @observer
 class Editor extends React.Component {
   render() {
     const ui = this.props.storeUIEditor
@@ -14,11 +14,16 @@ class Editor extends React.Component {
       <UserItemUploadButton />
 
       <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
-       <img src={ui.modalItem} style={{width:"100%"}} />
+       <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
       </Modal>
 
      </div>
     )
+  }
+
+  componentWillMount () {
+    this.props.storeEditor.setHistory(this.props.history)
+    this.props.storeEditor.checkRiddle()
   }
 }
 
