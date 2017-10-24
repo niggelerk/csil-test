@@ -8,18 +8,28 @@ import {inject,observer} from 'mobx-react'
 class Editor extends React.Component {
   render() {
     const ui = this.props.storeUIEditor
-    return (
-     <div className="editor-root">
-      <UserItemList />
-      <UserItemUploadButton />
+    const isDeleted = this.props.storeEditor.isDeleted
 
-      <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
-       <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
-      </Modal>
+    return(
+      <div>
+      {isDeleted && <div className="editor-root">deleted</div>}
+      {!isDeleted &&
+        <div className="editor-root">
+         <UserItemList />
+         <UserItemUploadButton />
+         <DeleteRiddleButton />
 
-     </div>
+         <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
+          <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
+         </Modal>
+
+        </div>
+      }
+      </div>
     )
   }
+
+
 
   componentWillMount () {
     this.props.storeEditor.setHistory(this.props.history)
@@ -92,6 +102,17 @@ class UserItemUploadButton extends React.Component {
     return (
       <Button shape="circle" icon="camera-o" className="editor-upload-button">
        <Dropzone className="dropzone" onDrop={store.uploadFile} />
+      </Button>
+    )
+  }
+}
+
+@inject('storeEditor') @observer
+class DeleteRiddleButton extends React.Component {
+  render () {
+    const store = this.props.storeEditor
+    return (
+      <Button shape="circle" icon="delete" className="riddle-delete-button" onClick={store.deleteRiddle}>
       </Button>
     )
   }

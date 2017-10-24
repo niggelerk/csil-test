@@ -71,6 +71,16 @@ class Database {
     })
   }
 
+  deleteRiddle (shortId,cb) {
+    const sql = "Update riddles SET deleted = 1 WHERE shortid="+pool.escape(shortId)
+    this.query(sql, cb)
+  }
+
+  checkDeletion (shortId, cb) {
+    const sql = "SELECT deleted FROM items WHERE shortid="+pool.escape(shortId)
+    this.query(sql, cb)
+  }
+
 }
 
 

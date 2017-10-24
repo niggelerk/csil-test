@@ -35,6 +35,31 @@ app.post('/api/riddle/get', (req,res) => {
   } else res.json(fail)
 })
 
+app.post('/api/riddle/delete', (req,res) => {
+  const shortId = req.body.shortId ? req.body.shortId : ''
+
+  if (shortId && shortId !== '') {
+    db.deleteRiddle(shortId, () => {
+      res.json({success:true})
+  })
+}
+})
+
+app.post('/api/riddle/checkDeletion', (req,res) => {
+  const shortId = req.body.shortId ? req.body.shortId : ''
+
+  if (shortId && shortId !== '') {
+    db.checkDeletion(shortId, (isdeleted) => {
+      if (isdeleted==1){
+        isdeleted = true
+      } else {
+        isdeleted = false
+      }
+      res.json({deleted:isdeleted})
+    })
+  }
+})
+
 // wildcard route (needed for browserhistory on react spa pattern)
 app.get('*', function(req, res) {
  res.sendFile(path.resolve(__dirname, '../', 'index.html'))

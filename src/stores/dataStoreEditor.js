@@ -16,6 +16,7 @@ class DataStoreEditor {
  @observable shortId
  @observable history
  @observable items = []
+ @observable isDeleted = false
 
  @action.bound removeItem(indexToRemove) {
   if (this.items.length !== 0) {
@@ -42,14 +43,46 @@ class DataStoreEditor {
  @action checkRiddle () {
    const riddleShortId = getUrlParameter('r')
 
-   if (riddleShortId && riddleShortId !== '') {
+   if (riddleShortId && riddleShortId !== '' && (this.isDeleted == false)) {
      // get riddle content from server
     this.setShortId(riddleShortId)
     this.getRiddle(riddleShortId)
-   } else {
+  } if (this.checkDeletion(riddleShortId)) {
+    this.isDeleted = true
+  } else {
      // create new riddle on server
      this.createNewRiddle( (shortId) => {
       this.setShortId(shortId)
+     })
+   }
+ }
+
+ @action.bound checkDeletion(riddleShortId){
+   fetch('/api/riddle/checkDeletion', {
+     method: 'POST',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify({shortId:this.shortId})
+   })
+   .then((resp) => resp.json())
+   .then((data) => {
+     if (data) {
+       this.isDeleted = true
+     }
+   })
+ }
+
+ @action.bound deleteRiddle() {
+   if (this.shortId && this.shortId !== '') {
+     fetch('/api/riddle/delete', {
+       method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({shortId:this.shortId})
      })
    }
  }
@@ -77,7 +110,6 @@ class DataStoreEditor {
    })
    .then((resp) => resp.json())
    .then((data) => {
-     console.log(data);
      this.history.push({
        search: '?r='+data.shortId
      })
