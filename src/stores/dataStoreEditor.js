@@ -40,19 +40,22 @@ class DataStoreEditor {
    this.shortId = shortId
  }
 
- @action checkRiddle () {
+ @action.bound checkRiddle (cb) {
    const riddleShortId = getUrlParameter('r')
 
    if (riddleShortId && riddleShortId !== '' && (this.isDeleted == false)) {
      // get riddle content from server
     this.setShortId(riddleShortId)
     this.getRiddle(riddleShortId)
-  } if (this.checkDeletion(riddleShortId)) {
-    this.isDeleted = true
-  } else {
+
+    if (this.checkDeletion(riddleShortId)) {
+     this.isDeleted = true
+    }
+   }  else {
      // create new riddle on server
      this.createNewRiddle( (shortId) => {
       this.setShortId(shortId)
+      if (cb) cb()
      })
    }
  }
@@ -68,7 +71,7 @@ class DataStoreEditor {
    })
    .then((resp) => resp.json())
    .then((data) => {
-     if (data) {
+     if (data.deleted) {
        this.isDeleted = true
      }
    })
@@ -83,6 +86,12 @@ class DataStoreEditor {
          'Content-Type': 'application/json',
        },
        body: JSON.stringify({shortId:this.shortId})
+     })
+     .then((resp) => resp.json())
+     .then((data) => {
+       if (data.success) {
+         this.isDeleted = true
+       }
      })
    }
  }
@@ -196,6 +205,22 @@ class DataStoreEditor {
   }
   array.splice(newIndex, 0, array.splice(previousIndex, 1)[0])
   this.items = array
+ }
+
+ @action.bound deleteItem(id, shortId, cb){
+   fetch('/api/editor/deleteImage', {
+     method: 'POST',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify({id:id, shortId:shortId})
+   })
+   .then((resp) => resp.json())
+   .then((data) => {
+     this.removeItem(id)
+    if (cb) cb()
+   })
  }
 
 }

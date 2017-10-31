@@ -3,6 +3,10 @@ import Dropzone from 'react-dropzone'
 import {SortableContainer, SortableElement} from 'react-sortable-hoc'
 import { Icon, Modal, Spin, Button } from 'antd'
 import {inject,observer} from 'mobx-react'
+import {
+ Link
+} from 'react-router-dom'
+
 
 @inject('storeEditor','storeUIEditor') @observer
 class Editor extends React.Component {
@@ -12,7 +16,7 @@ class Editor extends React.Component {
 
     return(
       <div>
-      {isDeleted && <div className="editor-root">deleted</div>}
+      {isDeleted && <div className="editor-root"><DeletedScreen /></div>}
       {!isDeleted &&
         <div className="editor-root">
          <UserItemList />
@@ -22,14 +26,11 @@ class Editor extends React.Component {
          <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
           <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
          </Modal>
-
         </div>
       }
       </div>
     )
   }
-
-
 
   componentWillMount () {
     this.props.storeEditor.setHistory(this.props.history)
@@ -69,10 +70,10 @@ class UserItemList extends React.Component {
   }
 }
 
-@inject('storeUIEditor') @observer
+@inject('storeUIEditor','storeEditor') @observer
 class UserItem extends React.Component {
   render () {
-    const item = this.props.item, ui = this.props.storeUIEditor
+    const item = this.props.item, ui = this.props.storeUIEditor, store = this.props.storeEditor
     const SortableItem = SortableElement( observer(() => {
      return (
       <div
@@ -85,6 +86,25 @@ class UserItem extends React.Component {
          <div className="editor-star-number"> {this.props.index+1} </div>
         </Icon>
        </div>
+       <div>
+        <Button type="default" className="item-delete-button" onClick ={ui.handleOpendeleteModal}> x </Button>
+       </div>
+
+       <div>
+       <Modal
+         title="Basic Modal"
+         visible={ui.deleteModalOpen}
+         onOk={this.confirmDeletion.bind(this,item.id)}
+       >
+         <p>Some contents...</p>
+         <p>Some contents...</p>
+         <p>Some contents...</p>
+       </Modal>
+
+
+       </div>
+
+
       </div>
      )
     }))
@@ -93,6 +113,15 @@ class UserItem extends React.Component {
       <SortableItem index={this.props.index} />
     )
  }
+
+
+
+ confirmDeletion (id) {
+   this.props.storeUIEditor.handleClosedeleteModal()
+   this.props.storeEditor.deleteItem(id)
+ }
+
+
 }
 
 @inject('storeEditor') @observer
@@ -117,5 +146,29 @@ class DeleteRiddleButton extends React.Component {
     )
   }
 }
+
+@inject('storeEditor') @observer
+class DeletedScreen extends React.Component {
+  render(){
+    return (
+      <div align = "center" >
+        <br/><br/><br/><br/>
+        <img src ="/public/image/garbage.png" width="50%" />
+        <br/><br/><br/><br/><br/>
+        <Button type = "default" size='large' onClick={this.dskfdskl}> Neues Rätsel erstellen </Button>
+      </div>
+    )
+  }
+
+ // method does the same like componentWillMount in Editor, but does it by pressing the Button "Neues Rätsel erstellen"
+  dskfdskl  = ()  => {
+    this.props.storeEditor.checkRiddle( () => {
+      this.props.storeEditor.history.push({
+        search: '?r='+this.props.storeEditor.shortId
+      })
+      this.props.storeEditor.isDeleted = false
+    })
+  }
+ }
 
 export default Editor

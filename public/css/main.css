@@ -88,6 +88,12 @@ body {
   color:black;
 }
 
+.item-delete-button {
+  position: absolute !important;
+  top:-50px;
+  z-index:5;
+}
+
 .editor-upload-button {
   position:fixed !important;
   bottom:80px;

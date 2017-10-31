@@ -45,19 +45,24 @@ app.post('/api/riddle/delete', (req,res) => {
 }
 })
 
+app.post('/api/editor/deleteImage', (req,res) => {
+  const id = req.body.id ? req.body.id : ''
+
+  if (id && id !== '') {
+    db.deleteItem(id, () => {
+      res.json({success:true})
+  })
+} else res.json(fail)
+})
+
 app.post('/api/riddle/checkDeletion', (req,res) => {
   const shortId = req.body.shortId ? req.body.shortId : ''
 
   if (shortId && shortId !== '') {
     db.checkDeletion(shortId, (isdeleted) => {
-      if (isdeleted==1){
-        isdeleted = true
-      } else {
-        isdeleted = false
-      }
       res.json({deleted:isdeleted})
     })
-  }
+  } else res.json(fail)
 })
 
 // wildcard route (needed for browserhistory on react spa pattern)

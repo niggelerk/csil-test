@@ -77,7 +77,16 @@ class Database {
   }
 
   checkDeletion (shortId, cb) {
-    const sql = "SELECT deleted FROM items WHERE shortid="+pool.escape(shortId)
+    const sql = "SELECT deleted FROM riddles WHERE shortid="+pool.escape(shortId)
+    this.query(sql, (err,result) => {
+      if (result && result[0]) {
+        cb(result[0].deleted)
+      } else cb(false)
+    })
+  }
+
+  deleteItem (idItem, cb) {
+    const sql = "DELETE id FROM items WHERE id="+pool.escape(idItem)
     this.query(sql, cb)
   }
 
