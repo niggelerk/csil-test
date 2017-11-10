@@ -86,7 +86,7 @@ class Database {
   }
 
   deleteItem (idItem, cb) {
-    const sql = "DELETE id FROM items WHERE id="+pool.escape(idItem)
+    const sql = "DELETE FROM items WHERE id="+pool.escape(idItem)
     this.query(sql, cb)
   }
 

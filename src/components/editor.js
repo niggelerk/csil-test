@@ -6,6 +6,8 @@ import {inject,observer} from 'mobx-react'
 import { Link } from 'react-router-dom'
 import Header from './header'
 import Footer from './footer'
+import Layout from './layout'
+
 
 @inject('storeEditor','storeUIEditor') @observer
 class Editor extends React.Component {
@@ -14,26 +16,21 @@ class Editor extends React.Component {
     const isDeleted = this.props.storeEditor.isDeleted
 
     return(
-      <div>
-      {isDeleted && <div className="editor-root"><Header/><DeletedScreen /><Footer/></div>}
+      <Layout>
+      {isDeleted && <div className="editor-root"><DeletedScreen /></div>}
       {!isDeleted &&
         <div className="editor-root">
-         <div className="header">
-          <Header/>
-         </div>
+
          <UserItemList />
          <UserItemUploadButton />
-         <DeleteRiddleButton />
 
          <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
           <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
          </Modal>
-         <div className="footer">
-          <Footer/>
-         </div>
+
         </div>
       }
-      </div>
+      </Layout>
     )
   }
 
@@ -67,7 +64,6 @@ class UserItemList extends React.Component {
     return (
       <SortableList
        axis="x"
-       lockAxis="x"
        helperClass='sortableHelper'
        pressDelay={100}
        onSortEnd={store.swapItems}
@@ -136,18 +132,8 @@ class UserItemUploadButton extends React.Component {
   }
 }
 
-@inject('storeEditor') @observer
-class DeleteRiddleButton extends React.Component {
-  render () {
-    const store = this.props.storeEditor
-    return (
-      <Button shape="circle" icon="delete" className="riddle-delete-button" onClick={store.deleteRiddle}>
-      </Button>
-    )
-  }
-}
 
-@inject('storeEditor') @observer
+@inject('storeEditor', 'storeUIEditor') @observer
 class DeletedScreen extends React.Component {
   render(){
     return (
@@ -158,16 +144,6 @@ class DeletedScreen extends React.Component {
         <Button type = "default" size='large' onClick={this.dskfdskl}> Neues Rätsel erstellen </Button>
       </div>
     )
-  }
-
- // method does the same like componentWillMount in Editor, but does it by pressing the Button "Neues Rätsel erstellen"
-  dskfdskl  = ()  => {
-    this.props.storeEditor.checkRiddle( () => {
-      this.props.storeEditor.history.push({
-        search: '?r='+this.props.storeEditor.shortId
-      })
-      this.props.storeEditor.isDeleted = false
-    })
   }
  }
 

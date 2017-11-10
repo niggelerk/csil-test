@@ -5,21 +5,19 @@ import {inject,observer} from 'mobx-react'
 
 @inject('storeEditor','storeUIEditor') @observer
 class Footer extends React.Component{
-  render () {
-    const ui = this.props.storeUIEditor
-    let footer = null
-    if (ui.isFooterShown) {
-      footer = <div style={{position:"fixed"}}> Footer </div>
-    }
-    return ( footer )
+  render(){
+    const store = this.props.storeEditor
+    return(
+      <Button shape="circle" icon="delete" className="footer-trash">
+       <Dropzone className="dropzone" onDrop={store.deleteItem} />
+      </Button>
+    )
   }
 
   componentWillMount () {
-    const ui = this.props.storeUIEditor
-
-    if (window.location.pathname === '/editor') {
-      ui.hideFooter()
-    } else ui.showFooter()
+    if (window.location.pathname === "/editor") {
+      this.props.storeUIEditor.hideFooter()
+    }
   }
 
 }
