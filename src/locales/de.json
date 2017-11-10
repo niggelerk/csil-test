@@ -1,0 +1,11 @@
+{
+  "general": {
+   "OK":"OK",
+   "abort":"Abbrechen"
+  },
+  "editor":{
+    "confirmDeletion":"Löschen bestätigen",
+    "reallyDelete":"Willst du dieses Bild löschen?",
+    "createNewRiddle":"Neues Rätsel erstellen"
+  }
+}

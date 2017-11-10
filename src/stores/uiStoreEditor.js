@@ -5,9 +5,15 @@ class UIStoreEditor {
  @observable isItemLoading = false
  @observable modalItem
  @observable deleteModalOpen = false
+ @observable isFooterShown = true
+ @observable isSettingsOpen = false
 
  @action.bound toggleItemLoading () {
    this.isItemLoading = !this.isItemLoading
+ }
+
+ @action.bound toggleSettingsOpen() {
+   this.isSettingsOpen = !this.isSettingsOpen
  }
 
  @action.bound showModalItem (modalItem) {
@@ -26,6 +32,14 @@ class UIStoreEditor {
  @action.bound handleClosedeleteModal () {
    this.deleteModalOpen = false
  }
+
+ @action.bound showFooter () {
+   this.isFooterShown = true
+ }
+
+@action.bound hideFooter () {
+  this.isFooterShown = false
+}
 
 }
 

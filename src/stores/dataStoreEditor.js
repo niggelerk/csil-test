@@ -40,6 +40,13 @@ class DataStoreEditor {
    this.shortId = shortId
  }
 
+ @action.bound deleteShortId () {
+   this.shortId = null
+   this.history.push({
+     search:''
+   })
+ }
+
  @action.bound checkRiddle (cb) {
    const riddleShortId = getUrlParameter('r')
 
@@ -91,6 +98,7 @@ class DataStoreEditor {
      .then((data) => {
        if (data.success) {
          this.isDeleted = true
+         this.deleteShortId()
        }
      })
    }
@@ -119,10 +127,10 @@ class DataStoreEditor {
    })
    .then((resp) => resp.json())
    .then((data) => {
-     this.history.push({
+     this.history.replace({
        search: '?r='+data.shortId
      })
-
+     this.isDeleted = false
      cb(data.shortId)
    })
  }

@@ -11,6 +11,16 @@ body {
  height:100%;
 }
 
+.header{
+  width: 100% !important;
+  float: left;
+}
+
+.footer {
+  width: 100%;
+  float: both;
+}
+
 .sortableHelper {
 
 }
@@ -68,6 +78,7 @@ body {
   white-space:nowrap;
   overflow:hidden;
   padding:50px;
+  float:both;
 }
 
 .editor-star-container {
@@ -125,6 +136,14 @@ body {
 .riddle-delete-button {
   position:fixed !important;
   bottom:10px;
+  right:10px;
+  width:60px !important;
+  height:60px !important;
+}
+
+.riddle-settings-button {
+  position:fixed !important;
+  top:10px;
   right:10px;
   width:60px !important;
   height:60px !important;

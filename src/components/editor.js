@@ -3,10 +3,9 @@ import Dropzone from 'react-dropzone'
 import {SortableContainer, SortableElement} from 'react-sortable-hoc'
 import { Icon, Modal, Spin, Button } from 'antd'
 import {inject,observer} from 'mobx-react'
-import {
- Link
-} from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
+import Header from './header'
+import Footer from './footer'
 
 @inject('storeEditor','storeUIEditor') @observer
 class Editor extends React.Component {
@@ -16,9 +15,12 @@ class Editor extends React.Component {
 
     return(
       <div>
-      {isDeleted && <div className="editor-root"><DeletedScreen /></div>}
+      {isDeleted && <div className="editor-root"><Header/><DeletedScreen /><Footer/></div>}
       {!isDeleted &&
         <div className="editor-root">
+         <div className="header">
+          <Header/>
+         </div>
          <UserItemList />
          <UserItemUploadButton />
          <DeleteRiddleButton />
@@ -26,6 +28,9 @@ class Editor extends React.Component {
          <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
           <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
          </Modal>
+         <div className="footer">
+          <Footer/>
+         </div>
         </div>
       }
       </div>
@@ -37,6 +42,7 @@ class Editor extends React.Component {
     this.props.storeEditor.checkRiddle()
   }
 }
+
 
 @inject('storeUIEditor','storeEditor') @observer
 class UserItemList extends React.Component {
@@ -89,21 +95,15 @@ class UserItem extends React.Component {
        <div>
         <Button type="default" className="item-delete-button" onClick ={ui.handleOpendeleteModal}> x </Button>
        </div>
-
        <div>
        <Modal
-         title="Basic Modal"
+         title="Löschen bestätigen"
          visible={ui.deleteModalOpen}
          onOk={this.confirmDeletion.bind(this,item.id)}
        >
-         <p>Some contents...</p>
-         <p>Some contents...</p>
-         <p>Some contents...</p>
+         <p>Willst du dieses Bild löschen?</p>
        </Modal>
-
-
        </div>
-
 
       </div>
      )
