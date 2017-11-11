@@ -18,20 +18,23 @@ class Editor extends React.Component {
     const isDeleted = this.props.storeEditor.isDeleted
 
     return(
-      <Layout>
-     {isDeleted && <DeletedScreen />}
-     {!isDeleted &&
-      <div className="editor-root disable-selection">
-       <UserItemList />
-       <UserItemUploadButton />
-       <DeleteRiddleButton />
+     <Layout>
 
-       <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
-        <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
-       </Modal>
-      </div>
-    }
-    </Layout>
+      {isDeleted && <DeletedScreen />}
+
+      {!isDeleted &&
+       <div className="editor-root disable-selection">
+        <UserItemList />
+        <UserItemUploadButton />
+        <DeleteRiddleButton />
+
+        <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
+         <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
+        </Modal>
+       </div>
+      }
+
+     </Layout>
     )
   }
 

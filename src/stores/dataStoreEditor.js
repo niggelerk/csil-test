@@ -130,7 +130,7 @@ class DataStoreEditor {
      this.history.replace({
        search: '?r='+data.shortId
      })
-     this.isDeleted = false
+     this.resetEditor()
      cb(data.shortId)
    })
  }
@@ -150,6 +150,11 @@ class DataStoreEditor {
       cb(data.itemId)
     }
    })
+ }
+
+ @action.bound resetEditor () {
+   this.isDeleted = false
+   this.items = []
  }
 
  @action.bound uploadFile(files) {
