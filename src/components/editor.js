@@ -8,6 +8,8 @@ import Header from './header'
 import Footer from './footer'
 import Layout from './layout'
 
+import T from 'i18n-react'
+
 
 @inject('storeEditor','storeUIEditor') @observer
 class Editor extends React.Component {
@@ -17,20 +19,19 @@ class Editor extends React.Component {
 
     return(
       <Layout>
-      {isDeleted && <div className="editor-root"><DeletedScreen /></div>}
-      {!isDeleted &&
-        <div className="editor-root">
+     {isDeleted && <DeletedScreen />}
+     {!isDeleted &&
+      <div className="editor-root disable-selection">
+       <UserItemList />
+       <UserItemUploadButton />
+       <DeleteRiddleButton />
 
-         <UserItemList />
-         <UserItemUploadButton />
-
-         <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
-          <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
-         </Modal>
-
-        </div>
-      }
-      </Layout>
+       <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
+        <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
+       </Modal>
+      </div>
+    }
+    </Layout>
     )
   }
 
@@ -78,30 +79,32 @@ class UserItem extends React.Component {
     const item = this.props.item, ui = this.props.storeUIEditor, store = this.props.storeEditor
     const SortableItem = SortableElement( observer(() => {
      return (
-      <div
-       className="editor-item"
-       style={{backgroundImage:"url("+item.url+")"}}
-       onClick={ui.showModalItem.bind(this,item.url)}
-      >
-       <div className="editor-star-container">
-        <Icon type="star" className="editor-star">
-         <div className="editor-star-number"> {this.props.index+1} </div>
-        </Icon>
-       </div>
-       <div>
-        <Button type="default" className="item-delete-button" onClick ={ui.handleOpendeleteModal}> x </Button>
-       </div>
-       <div>
-       <Modal
-         title="Löschen bestätigen"
-         visible={ui.deleteModalOpen}
-         onOk={this.confirmDeletion.bind(this,item.id)}
+       <div
+        className="editor-item"
+        style={{backgroundImage:"url("+item.url+")"}}
+        onClick={ui.showModalItem.bind(this,item.url)}
        >
-         <p>Willst du dieses Bild löschen?</p>
-       </Modal>
-       </div>
 
-      </div>
+        <Button type="default" className="item-delete-button" onClick={this.openDeleteModal}> &times; </Button>
+
+        <div className="editor-star-container">
+         <Icon type="star" className="editor-star">
+          <div className="editor-star-number"> {this.props.index+1} </div>
+         </Icon>
+        </div>
+
+        <Modal
+          title={T.translate("editor.confirmDeletion")}
+          visible={ui.deleteModalOpen}
+          onOk={this.confirmDeletion.bind(this,item.id)}
+          onCancel={ui.handleClosedeleteModal}
+          okText={T.translate("general.OK")}
+          cancelText={T.translate("general.abort")}
+        >
+          <p>{T.translate("editor.reallyDelete")}</p>
+        </Modal>
+
+       </div>
      )
     }))
 
@@ -111,13 +114,26 @@ class UserItem extends React.Component {
  }
 
 
+ openDeleteModal = (e) => {
+   e.stopPropagation()
+   this.props.storeUIEditor.handleOpendeleteModal()
+ }
 
  confirmDeletion (id) {
    this.props.storeUIEditor.handleClosedeleteModal()
    this.props.storeEditor.deleteItem(id)
  }
 
+}
 
+@inject('storeEditor') @observer
+class DeleteRiddleButton extends React.Component {
+  render () {
+    const store = this.props.storeEditor
+    return (
+      <Button shape="circle" icon="delete" className="riddle-delete-button" onClick={store.deleteRiddle} />
+    )
+  }
 }
 
 @inject('storeEditor') @observer
@@ -137,14 +153,23 @@ class UserItemUploadButton extends React.Component {
 class DeletedScreen extends React.Component {
   render(){
     return (
-      <div align = "center" >
-        <br/><br/><br/><br/>
-        <img src ="/public/image/garbage.png" width="50%" />
-        <br/><br/><br/><br/><br/>
-        <Button type = "default" size='large' onClick={this.dskfdskl}> Neues Rätsel erstellen </Button>
+      <div className="width-100-height-100">
+       <div className="editor-root disable-selection">
+        <div className="editor-wrapper editor-delete-container">
+
+         <img src ="/public/image/garbage.png" alt="deletedRiddle"/>
+         <Button type = "default" size='large' onClick={this.createNewRiddle}> {T.translate("editor.createNewRiddle")} </Button>
+
+        </div>
+       </div>
       </div>
     )
   }
+
+  createNewRiddle = () => {
+    this.props.storeEditor.checkRiddle()
+  }
+
  }
 
 export default Editor

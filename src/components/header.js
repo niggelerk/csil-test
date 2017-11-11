@@ -10,7 +10,7 @@ class Header extends React.Component{
     const isSettingsOpen = this.props.storeUIEditor.isSettingsOpen
 
     return(
-      <div>
+      <div id="header">
        {!isSettingsOpen && <div><SettingsRiddleButton /></div>}
        {isSettingsOpen && <div><SettingsRiddleButton /><DeleteRiddleButton /></div>}
       </div>
