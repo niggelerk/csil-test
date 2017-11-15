@@ -6,6 +6,7 @@
   "editor":{
     "confirmDeletion":"Löschen bestätigen",
     "reallyDelete":"Willst du dieses Bild löschen?",
-    "createNewRiddle":"Neues Rätsel erstellen"
+    "createNewRiddle":"Neues Rätsel erstellen",
+    "deleteRiddle":"Dieses Rätsel löschen"
   }
 }

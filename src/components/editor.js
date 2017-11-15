@@ -1,13 +1,10 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Dropzone from 'react-dropzone'
 import {SortableContainer, SortableElement} from 'react-sortable-hoc'
 import { Icon, Modal, Spin, Button } from 'antd'
 import {inject,observer} from 'mobx-react'
-import { Link } from 'react-router-dom'
-import Header from './header'
-import Footer from './footer'
 import Layout from './layout'
-
 import T from 'i18n-react'
 
 
@@ -26,14 +23,12 @@ class Editor extends React.Component {
        <div className="editor-root disable-selection">
         <UserItemList />
         <UserItemUploadButton />
-        <DeleteRiddleButton />
 
         <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
          <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
         </Modal>
        </div>
       }
-
      </Layout>
     )
   }
@@ -44,7 +39,6 @@ class Editor extends React.Component {
   }
 }
 
-
 @inject('storeUIEditor','storeEditor') @observer
 class UserItemList extends React.Component {
   render () {
@@ -53,14 +47,14 @@ class UserItemList extends React.Component {
       return (
         <div className="editor-wrapper">
           {store.items.map((item, index) => (
-           <UserItem key={index} index={index} item={item} />
-          ))
-         }
-         {ui.isItemLoading &&
+            <UserItem key={index} index={index} item={item} />
+           ))
+          }
+          {ui.isItemLoading &&
           <div className="editor-item editor-loading">
            <Spin size="large" />
           </div>
-         }
+          }
         </div>
       )
     } ))
@@ -82,7 +76,9 @@ class UserItem extends React.Component {
     const item = this.props.item, ui = this.props.storeUIEditor, store = this.props.storeEditor
     const SortableItem = SortableElement( observer(() => {
      return (
+
        <div
+        ref={item => this.useritem = item}
         className="editor-item"
         style={{backgroundImage:"url("+item.url+")"}}
         onClick={ui.showModalItem.bind(this,item.url)}
@@ -114,8 +110,8 @@ class UserItem extends React.Component {
     return (
       <SortableItem index={this.props.index} />
     )
- }
 
+   }
 
  openDeleteModal = (e) => {
    e.stopPropagation()
@@ -127,16 +123,6 @@ class UserItem extends React.Component {
    this.props.storeEditor.deleteItem(id)
  }
 
-}
-
-@inject('storeEditor') @observer
-class DeleteRiddleButton extends React.Component {
-  render () {
-    const store = this.props.storeEditor
-    return (
-      <Button shape="circle" icon="delete" className="riddle-delete-button" onClick={store.deleteRiddle} />
-    )
-  }
 }
 
 @inject('storeEditor') @observer

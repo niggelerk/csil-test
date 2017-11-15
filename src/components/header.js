@@ -1,8 +1,7 @@
 import React from 'react'
-import Dropzone from 'react-dropzone'
-import { Icon, Spin, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Button } from 'antd'
 import {inject,observer} from 'mobx-react'
+import T from 'i18n-react'
 
 @inject('storeUIEditor') @observer
 class Header extends React.Component{
@@ -21,7 +20,6 @@ class Header extends React.Component{
 @inject('storeEditor','storeUIEditor') @observer
 class SettingsRiddleButton extends React.Component {
   render () {
-    const store = this.props.storeEditor
     const ui = this.props.storeUIEditor
     return (
       <Button shape="circle" icon="setting" className="riddle-settings-button" onClick = {ui.toggleSettingsOpen}>
@@ -35,8 +33,7 @@ class DeleteRiddleButton extends React.Component {
   render () {
     const store = this.props.storeEditor
     return (
-      <Button shape="circle" icon="delete" className="riddle-delete-button" onClick={store.deleteRiddle}>
-      </Button>
+      <Button className="riddle-delete-button" onClick={store.deleteRiddle}> {T.translate("editor.deleteRiddle")} </Button>
     )
   }
 }

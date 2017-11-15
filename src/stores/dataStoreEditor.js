@@ -32,6 +32,7 @@ class DataStoreEditor {
   }
  }
 
+
  @action.bound setHistory (history) {
    this.history = history
  }
@@ -50,7 +51,7 @@ class DataStoreEditor {
  @action.bound checkRiddle (cb) {
    const riddleShortId = getUrlParameter('r')
 
-   if (riddleShortId && riddleShortId !== '' && (this.isDeleted == false)) {
+   if (riddleShortId && riddleShortId !== '' && (this.isDeleted === false)) {
      // get riddle content from server
     this.setShortId(riddleShortId)
     this.getRiddle(riddleShortId)
