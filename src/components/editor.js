@@ -13,6 +13,7 @@ class Editor extends React.Component {
   render() {
     const ui = this.props.storeUIEditor
     const isDeleted = this.props.storeEditor.isDeleted
+    const isDraggedForDeletion = this.props.storeUIEditor.isDraggedForDeletion
 
     return(
      <Layout>
@@ -23,7 +24,7 @@ class Editor extends React.Component {
        <div className="editor-root disable-selection">
         <UserItemList />
         <UserItemUploadButton />
-
+        {isDraggedForDeletion && <ItemDelete />}
         <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
          <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
         </Modal>
@@ -64,7 +65,8 @@ class UserItemList extends React.Component {
        axis="x"
        helperClass='sortableHelper'
        pressDelay={100}
-       onSortEnd={store.swapItems}
+       onSortMove={store.showDeletion}
+       onSortEnd={store.handleSortEnd}
       />
     )
   }
@@ -125,6 +127,17 @@ class UserItem extends React.Component {
 
 }
 
+@inject('storeEditor', 'storeUIEditor') @observer
+class ItemDelete extends React.Component {
+  render () {
+    const store = this.props.storeEditor
+    const ui = this.props.storeUIEditor
+    return (
+      <div className = "item-delete"/>
+    )
+  }
+}
+
 @inject('storeEditor') @observer
 class UserItemUploadButton extends React.Component {
   render () {
@@ -147,7 +160,7 @@ class DeletedScreen extends React.Component {
         <div className="editor-wrapper editor-delete-container">
 
          <img src ="/public/image/garbage.png" alt="deletedRiddle"/>
-         <Button type = "default" size='large' onClick={this.createNewRiddle}> {T.translate("editor.createNewRiddle")} </Button>
+         <Button type = "default" size='large' onClick={this.createNewRiddle} > {T.translate("editor.createNewRiddle")} </Button>
 
         </div>
        </div>
@@ -157,6 +170,7 @@ class DeletedScreen extends React.Component {
 
   createNewRiddle = () => {
     this.props.storeEditor.checkRiddle()
+    this.props.storeUIEditor.isSettingsOpen = false
   }
 
  }

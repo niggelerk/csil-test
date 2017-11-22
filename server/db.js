@@ -81,7 +81,7 @@ class Database {
     this.query(sql, (err,result) => {
       if (result && result[0]) {
         cb(result[0].deleted)
-      } else cb(false)
+      } else cb(true)
     })
   }
 

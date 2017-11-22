@@ -209,17 +209,34 @@ class DataStoreEditor {
   this.items[id-1] = {url: modifiedUrl, id: id}
  }
 
- @action.bound swapItems(obj) {
-  const array = this.items.slice(0), newIndex = obj.newIndex, previousIndex = obj.oldIndex
-  if (newIndex >= array.length) {
-    let k = newIndex - array.length
-    while (k-- + 1) {
-      array.push(undefined)
-    }
+@action.bound handleSortEnd(obj){
+  if(this.storeUIEditor.isDraggedForDeletion){
+    this.storeUIEditor.hideItemDelete()
+    this.deleteItem(this.items[obj.oldIndex].id, this.shortId)
+  } else {
+    this.swapItems(obj)
   }
-  array.splice(newIndex, 0, array.splice(previousIndex, 1)[0])
-  this.items = array
+}
+
+ @action.bound swapItems(obj) {
+   const array = this.items.slice(0), newIndex = obj.newIndex, previousIndex = obj.oldIndex
+   if (newIndex >= array.length) {
+       let k = newIndex - array.length
+       while (k-- + 1) {
+         array.push(undefined)
+     }
+   }
+   array.splice(newIndex, 0, array.splice(previousIndex, 1)[0])
+   this.items = array
  }
+
+ @action.bound showDeletion(e) {
+   if (e.screenY>=800) {
+    this.storeUIEditor.showItemDelete()
+  } else {
+     this.storeUIEditor.hideItemDelete()
+   }
+  }
 
  @action.bound deleteItem(id, shortId, cb){
    fetch('/api/editor/deleteImage', {
