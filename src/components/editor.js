@@ -24,7 +24,8 @@ class Editor extends React.Component {
        <div className="editor-root disable-selection">
         <UserItemList />
         <UserItemUploadButton />
-        {isDraggedForDeletion && <ItemDelete />}
+        {isDraggedForDeletion && <ItemDelete where={1} />}
+        {isDraggedForDeletion && <ItemDelete where={2} />}
         <Modal wrapClassName="vertical-center-modal" visible={ui.isModalVisible} onCancel={ui.closeModalItem} footer={null}>
          <img src={ui.modalItem} style={{width:"100%"}} alt=""/>
         </Modal>
@@ -44,6 +45,9 @@ class Editor extends React.Component {
 class UserItemList extends React.Component {
   render () {
     const ui = this.props.storeUIEditor, store = this.props.storeEditor
+
+
+
     const SortableList = SortableContainer( observer(() => {
       return (
         <div className="editor-wrapper">
@@ -76,17 +80,16 @@ class UserItemList extends React.Component {
 class UserItem extends React.Component {
   render () {
     const item = this.props.item, ui = this.props.storeUIEditor, store = this.props.storeEditor
+
     const SortableItem = SortableElement( observer(() => {
      return (
 
        <div
         ref={item => this.useritem = item}
-        className="editor-item"
+        className={"editor-item " + (ui.isDraggedForDeletion ? "grayscale" : "")}
         style={{backgroundImage:"url("+item.url+")"}}
         onClick={ui.showModalItem.bind(this,item.url)}
        >
-
-        <Button type="default" className="item-delete-button" onClick={this.openDeleteModal}> &times; </Button>
 
         <div className="editor-star-container">
          <Icon type="star" className="editor-star">
@@ -132,8 +135,9 @@ class ItemDelete extends React.Component {
   render () {
     const store = this.props.storeEditor
     const ui = this.props.storeUIEditor
+
     return (
-      <div className = "item-delete"/>
+        <div className ={"item-delete" + this.props.where}/>
     )
   }
 }

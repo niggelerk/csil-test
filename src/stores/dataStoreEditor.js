@@ -4,7 +4,7 @@ import superagent from 'superagent'
 import accessData from '../secret/accessData.json'
 import fetch from 'isomorphic-fetch'
 import { getUrlParameter } from '../utils/utils'
-
+import classNames from 'classnames'
 
 class DataStoreEditor {
 
@@ -231,7 +231,7 @@ class DataStoreEditor {
  }
 
  @action.bound showDeletion(e) {
-   if (e.screenY>=800) {
+   if ((100/window.innerHeight*e.screenY)>=85 ||(100/window.innerHeight*e.screenY) <=30) {
     this.storeUIEditor.showItemDelete()
   } else {
      this.storeUIEditor.hideItemDelete()
@@ -239,6 +239,7 @@ class DataStoreEditor {
   }
 
  @action.bound deleteItem(id, shortId, cb){
+   this.removeItem(id)
    fetch('/api/editor/deleteImage', {
      method: 'POST',
      headers: {
@@ -249,7 +250,6 @@ class DataStoreEditor {
    })
    .then((resp) => resp.json())
    .then((data) => {
-     this.removeItem(id)
     if (cb) cb()
    })
  }
